@@ -31,7 +31,7 @@ class ViewLogin extends Component{
       this.state.top = this.state.time.interpolate({
          inputRange:[0,100],
          outputRange:[-100,9],
-         extrapolate:'clamp'
+         extrapolate:'clamp',
     })
     :
       this.state.top = this.state.time.interpolate({
