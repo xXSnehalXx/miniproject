@@ -1,10 +1,16 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Text, View ,Image ,Platform,Dimensions ,TouchableOpacity ,Button,TextInput ,Animated ,PanResponder,Easing } from 'react-native';
+import {withFormik} from 'formik';
 import MyReactNativeForm from './loginForm.js';
+import CheckBox from 'react-native-checkbox';
+import Yup from 'yup';
+import Swiper from './Components/Swiper.js';
 
-import axios from 'axios';
-import qs from 'qs';
+
+
+
+
 class ViewLogin extends Component{
 
     constructor(props) {
@@ -27,7 +33,7 @@ class ViewLogin extends Component{
       this.state.top = this.state.time.interpolate({
          inputRange:[0,100],
          outputRange:[-100,9],
-         extrapolate:'clamp',
+         extrapolate:'clamp'
     })
     :
       this.state.top = this.state.time.interpolate({
@@ -97,6 +103,7 @@ class ViewLogin extends Component{
 
     render(){
         return (
+            <Swiper  activeDotColor='#000000' style={styles.wrapper} showsPagination={false} showsButtons={false} loop={false}>
                 <View style= { styles.mainContainer } >
                   <InfoSectionContainer logAnim = {this.afterLogInAnim}/>
                   <Animated.View style={[
@@ -127,6 +134,13 @@ class ViewLogin extends Component{
               </Animated.View>
           </View>
 
+          <AboutUs/>
+            </Swiper>
+
+
+
+
+
 
       )
     }
@@ -152,47 +166,18 @@ const InfoSectionContainer = (props) => {
     );
 }
 
+//HERE IS FORMIK WITH YUP
 
+//ABOVE IS FORMIX WITH YUP
 
 class LoginContainer extends Component{
 
-
-  loginButtonPressed = (user,passs) => {
-    var pass = passs;
-    var username = user;
-    pass = pass.trim();
-    const self = this;
-    const data = {
-      user: username,
-      pass: pass
-    };
-    const url = Platform.select({
-      ios: "http://localhost/mp/login.php",
-      android: "http://10.0.2.2/mp/login.php"
-    });
-
-    axios({
-      method: "POST",
-      url: url,
-      headers: { "content-type": "application/x-www-form-urlencoded" },
-      data: qs.stringify(data)
-    })
-      .then(function(response) {
-        if(response.data.secret == "XoReTu")
-            self._objc.animsOn();
-        else
-          alert("Incorrect Details")
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-  };
 
 render(){
     return (
         <View style={styles.loginContainer}>
           <ImageContainer/>
-          <MyReactNativeForm bullRef = {(ref) => this._objc = ref} logAnim ={this.props.logAnim} login = {this.loginButtonPressed}/>
+          <MyReactNativeForm logAnim ={this.props.logAnim}/>
         </View>
     )
 }
@@ -210,7 +195,7 @@ const ImageContainer = () => {
     <View style={styles.imageContainer}>
         <Image
           source={ima}
-          style={{height:100,width:100}}
+          style={{height:200,width:200}}
           />
     </View>
   );
@@ -227,7 +212,7 @@ const styles = StyleSheet.create({
     headerContainer:{
       flex:1,
       backgroundColor: '#FE616A',
-      // alignItems:'center',
+      alignItems:'center',
       justifyContent:'center',
     },
     headerText:{
@@ -240,8 +225,7 @@ const styles = StyleSheet.create({
       backgroundColor:'#F7F0D7'
     },
     loginContainer:{
-      flex:1,
-      marginTop:20,
+      flex:3,
       // backgroundColor:'#383535',
       margin:4,
     },
@@ -255,7 +239,7 @@ const styles = StyleSheet.create({
       margin:4,
       // backgroundColor:'#767F58',
       alignItems:'center',
-      // justifyContent:'flex-end'
+      justifyContent:'flex-end'
   },
   TopIcons:{
       height:60,
